@@ -6,4 +6,4 @@ EXPOSE 8000
 
 RUN pip install -r ./requirements.txt
 
-CMD backend.main:app --reload
+CMD unicorn backend.main:app --reload
