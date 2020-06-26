@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 
-from sentence_similarity.backend.sentence_similarity.db_operations import fetch_all_sentences
-from sentence_similarity.backend.sentence_similarity.db import get_database
+from .db_operations import fetch_all_sentences
+from .db import get_database
 
 
 class TextManager(object):

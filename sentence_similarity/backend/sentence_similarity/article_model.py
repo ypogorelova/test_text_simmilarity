@@ -2,13 +2,11 @@ from typing import List
 
 from pydantic import Schema
 
-from .db_model import DateTimeModelMixin, DBModelMixin
-from sentence_similarity.backend.sentence_similarity.rw_model import RWModel
+from .db_model import DateTimeModelMixin, DBModelMixin, RWModel
 
 
-class ArticleFilterParams(RWModel):
-    limit: int = 20
-    offset: int = 0
+class FilterParams(RWModel):
+    limit: int = 100
 
 
 class ArticleBase(RWModel):
@@ -32,7 +30,3 @@ class ArticleInResponse(RWModel):
 class ManyArticlesInResponse(RWModel):
     articles: List[Article]
     articles_count: int = Schema(..., alias="articlesCount")
-
-
-class ArticleInCreate(ArticleBase):
-    pass

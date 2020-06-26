@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import Schema
 
-from sentence_similarity.backend import RWModel
+from .db_model import RWModel
 
 
 class Sentence(RWModel):

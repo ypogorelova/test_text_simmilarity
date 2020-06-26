@@ -7,7 +7,7 @@
                         <v-text-field
                             v-model="form.article.title"
                             :rules="rules.title"
-                            color="purple darken-2"
+                            color="teal"
                             label="Title"
                             required
                         ></v-text-field>
@@ -80,6 +80,7 @@ export default {
             await api.createArticle(this.form);
             this.resetForm();
             await api.getArticles()
+            location.reload();
         }
     }
 };

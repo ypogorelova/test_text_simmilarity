@@ -1,23 +1,22 @@
-from fastapi import APIRouter, Body, Depends, Path
+from fastapi import APIRouter, Body, Depends, Path, Query
+from fastapi.encoders import jsonable_encoder
 from motor.motor_asyncio import AsyncIOMotorClient
+from pydantic.main import BaseModel
 from slugify import slugify
 from starlette.exceptions import HTTPException
+from starlette.responses import JSONResponse
 from starlette.status import HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY, HTTP_404_NOT_FOUND
 
-from sentence_similarity.backend.sentence_similarity.db_operations import (
+from .db_operations import (
     get_article_by_slug, create_article_by_slug, create_sentences, fetch_all_articles
 )
-from sentence_similarity.backend.sentence_similarity.web_utils import create_aliased_response
-from sentence_similarity.backend.sentence_similarity.article_model import (
-    ManyArticlesInResponse, ArticleInResponse, ArticleInCreate
+from .article_model import (
+    ManyArticlesInResponse, ArticleInResponse, ArticleBase, FilterParams
 )
-from sentence_similarity.backend.sentence_similarity.db import get_database
-from sentence_similarity.backend.sentence_similarity.sentence_model import (
-    SentenceList, ManySentenceSimilarityInResponse)
-from sentence_similarity.backend.sentence_similarity.text_manager import TextManager
-from sentence_similarity.backend.sentence_similarity.text_utils import (
-    get_similar_sentences, get_original_sentences_w_scores
-)
+from .db import get_database
+from .sentence_model import SentenceList, ManySentenceSimilarityInResponse
+from .text_manager import TextManager
+from .text_utils import get_similar_sentences, get_original_sentences_w_scores
 
 router = APIRouter()
 
@@ -25,8 +24,10 @@ router = APIRouter()
 @router.get("/articles", response_model=ManyArticlesInResponse, tags=["articles"])
 async def get_articles(
         db: AsyncIOMotorClient = Depends(get_database),
+        limit: int = Query(100, gt=0)
 ):
-    dbarticles = await fetch_all_articles(db)
+    filters = FilterParams(limit=limit)
+    dbarticles = await fetch_all_articles(db, filters)
     return create_aliased_response(
         ManyArticlesInResponse(articles=dbarticles, articles_count=len(dbarticles))
     )
@@ -53,12 +54,10 @@ async def get_article(
     status_code=HTTP_201_CREATED,
 )
 async def create_new_article(
-        article: ArticleInCreate = Body(..., embed=True),
+        article: ArticleBase = Body(..., embed=True),
         db: AsyncIOMotorClient = Depends(get_database),
 ):
-    article_by_slug = await get_article_by_slug(
-        db, slugify(article.title)
-    )
+    article_by_slug = await get_article_by_slug(db, slugify(article.title))
     if article_by_slug:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY,
@@ -87,3 +86,7 @@ async def get_similar(sentence: str = Body(..., embed=True)):
     return create_aliased_response(
         ManySentenceSimilarityInResponse(sentences=result, sentences_count=len(result))
     )
+
+
+def create_aliased_response(model: BaseModel) -> JSONResponse:
+    return JSONResponse(content=jsonable_encoder(model, by_alias=True))

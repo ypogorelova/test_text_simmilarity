@@ -7,8 +7,8 @@ from numpy import ndarray
 from sentence_transformers import SentenceTransformer
 from spacy.lang.en import STOP_WORDS
 
-from sentence_similarity.backend.sentence_similarity.config import closest_n
-from sentence_similarity.backend.sentence_similarity.sentence_model import SentenceSilimarity
+from .config import closest_n
+from .sentence_model import SentenceSilimarity
 
 
 def preprocess(sentence: str) -> str:
