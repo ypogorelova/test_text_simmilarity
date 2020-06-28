@@ -3,7 +3,7 @@ from typing import List
 from pydantic import Schema
 
 from .db_model import DateTimeModelMixin, DBModelMixin
-from .rw_model import RWModel
+from sentence_similarity.backend.sentence_similarity.rw_model import RWModel
 
 
 class ArticleFilterParams(RWModel):

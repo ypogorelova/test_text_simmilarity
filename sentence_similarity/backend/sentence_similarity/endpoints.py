@@ -1,22 +1,21 @@
-from fastapi import APIRouter, Body, Depends, Path, Query
+from fastapi import APIRouter, Body, Depends, Path
 from motor.motor_asyncio import AsyncIOMotorClient
 from slugify import slugify
 from starlette.exceptions import HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_422_UNPROCESSABLE_ENTITY, HTTP_404_NOT_FOUND
 
-from sentense_similarity.backend.db_operations import (
+from sentence_similarity.backend.sentence_similarity.db_operations import (
     get_article_by_slug, create_article_by_slug, create_sentences, fetch_all_articles
 )
-from sentense_similarity.backend.web_utils import create_aliased_response
-from sentense_similarity.backend.article_model import (
+from sentence_similarity.backend.sentence_similarity.web_utils import create_aliased_response
+from sentence_similarity.backend.sentence_similarity.article_model import (
     ManyArticlesInResponse, ArticleInResponse, ArticleInCreate
 )
-from sentense_similarity.backend.db import get_database
-from sentense_similarity.backend.sentence_model import (
-    SentenceList, ManySentenceSimilarityInResponse,
-    Sentence)
-from sentense_similarity.backend.text_manager import TextManager
-from sentense_similarity.backend.text_utils import (
+from sentence_similarity.backend.sentence_similarity.db import get_database
+from sentence_similarity.backend.sentence_similarity.sentence_model import (
+    SentenceList, ManySentenceSimilarityInResponse)
+from sentence_similarity.backend.sentence_similarity.text_manager import TextManager
+from sentence_similarity.backend.sentence_similarity.text_utils import (
     get_similar_sentences, get_original_sentences_w_scores
 )
 
@@ -44,9 +43,7 @@ async def get_article(
             status_code=HTTP_404_NOT_FOUND,
             detail=f"Article with slug '{slug}' not found",
         )
-    return create_aliased_response(
-        ArticleInResponse(article=dbarticle)
-    )
+    return create_aliased_response(ArticleInResponse(article=dbarticle))
 
 
 @router.post(

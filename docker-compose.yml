@@ -7,8 +7,8 @@ services:
       - .env
   web_app:
     build:
-      dockerfile: sentense_similarity/Dockerfile
-      context: sentense_similarity
+      dockerfile: sentence_similarity/Dockerfile
+      context: sentence_similarity
     image: sentense-similarity
     env_file:
       - .env

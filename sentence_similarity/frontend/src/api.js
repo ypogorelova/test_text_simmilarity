@@ -39,13 +39,3 @@ export default {
         return this.execute('post', '/articles', article);
     }
 };
-
-// export async function makeSad(text, title, type, options) {
-//     options = options || {};
-//     let settings = Object.assign({
-//       title: title || 'Oops!',
-//       html: text || 'Something went wrong',
-//       type: type || 'error',
-//     }, options);
-//     return await Vue.swal(settings);
-//   }

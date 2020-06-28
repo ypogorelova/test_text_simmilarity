@@ -2,8 +2,8 @@ import logging
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from sentense_similarity.backend.config import MONGODB_URL
-from sentense_similarity.backend.db import db
+from sentence_similarity.backend.sentence_similarity.config import MONGODB_URL
+from sentence_similarity.backend.sentence_similarity.db import db
 
 
 async def connect_to_mongo():
