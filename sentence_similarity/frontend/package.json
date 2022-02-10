@@ -11,7 +11,7 @@
     "@babel/polyfill": "^7.4.4",
     "axios": "^0.19.2",
     "core-js": "^2.6.5",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
